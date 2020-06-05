@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>{% block title %}Pinocchio's Pizzas & Subs{% endblock %}</title>
+  <link href="{% static "css/2base.css" %}" rel="stylesheet">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+
+</head>
+<body>
+  <div id="header">
+    <a href="javascript:history.back()" class="logo">&nbsp;Pinocchio's Pizzas & Subs</a>
+  </div>
+    <div class="cart" >
+<p style="float: right;padding-right: 20px " 
+      {% with total_items=cart|length %}
+          {% if cart|length > 0 %}
+           <font color="gray"> Your cart: </font>
+            <a href="{% url "cart:cart_detail" %}">
+              {{ total_items }} item{{ total_items|pluralize }},
+              ${{ cart.get_total_price }}
+            </a>
+          <a href="{% url "cart:cart_clear" %}"><font color="gray">Empty cart</font></a>
+          {% else %}
+            <font color="gray">Your cart is empty.</font>
+          {% endif %}
+           {% if cart|length == 0 %}
+           {% endif %}                 
+          {% endwith %}
+</p>
+
+    
+  </div>
+  <div id="content">
+
+  <div class="product-detail">
+<br>
+    <h1>{{ product.name }}</h1><br>
+    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+    <p class="price"></p>
+            {% if product.price %}
+         $ {{ product.price }}
+         {% else %}
+           {% endif %}
+    <form action="{% url "cart:cart_add" product.id %}" method="post">
+      {{ cart_product_form }}
+      {% csrf_token %}
+      <input type="submit" value="+">
+    </form>
+  </div>
+
+ </div>
+</body>
+</html>

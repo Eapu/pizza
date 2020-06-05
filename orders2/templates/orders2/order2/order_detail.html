@@ -1,0 +1,22 @@
+{% extends "orders/base.html" %}
+
+{% block title %}
+  Checkout
+{% endblock %}
+
+{% block content %}
+  <h1>History</h1>
+dd
+dd
+{% for order in my_orders %}
+
+    <li>Order nr.{{ order.id }},{{ order.user }},{{ order.created }}, paid{{ order.paid }}</li>
+{% endfor %}
+
+{% for order in orders %}
+{{ order.id }}
+{% endfor %}
+{{ order.id }}
+
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "orders/base.html" %}
+{% load static %}
+
+{% block title %}
+  {% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+
+{% block content %}
+<p style="float: right;padding-right: 60px " 
+      {% with total_items=cart|length %}
+          {% if cart|length > 0 %}
+           <font color="gray"> Your cart: </font>
+            <a href="{% url "cart:cart_detail" %}">
+              {{ total_items }} item{{ total_items|pluralize }},
+              $ {{ cart.get_total_price }}
+            </a>
+          <a href="{% url "cart:cart_clear" %}"><font color="gray">Empty cart</font></a>
+          {% else %}
+            <font color="gray">Your cart is empty.</font>
+          {% endif %}
+           {% if cart|length == 0 %}
+           {% endif %}                 
+          {% endwith %}
+</p>
+  <div id="sidebar">
+
+   <center> <h2 style="color: #232b2b">Categories<hr width="110%" color="white"></h2></center>
+    <ul>
+      <li {% if not category %}class="selected"{% endif %}>
+        <a href="{% url "orders:product_list" %}">All</a>
+      </li>
+      {% for c in categories %}
+        <li {% if category.slug == c.slug %}class="selected"{% endif %}>
+          <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+  </div>
+
+  <div id="main" class="product-list">
+  <br><br>  <br>
+    {% for product in products %}
+      <div class="item">
+     
+        <a href="{{ product.get_absolute_url }}">
+        {{ product.name }}</a><br>
+           {% if product.price %}
+        $ {{ product.price }}{% else %}{% endif %}
+     <form action="{% url "cart:cart_add" product.id %}" method="post">
+      {{ cart_product_form }}
+      {% csrf_token %}
+      <input type="submit" value="+">
+    </form>
+
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
